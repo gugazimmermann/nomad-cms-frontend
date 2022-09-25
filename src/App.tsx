@@ -5,6 +5,7 @@ import { MenuItemsType, OrderType, GenericObject } from "./interfaces/types";
 import Kiosk from "./pages/Kiosk/Kiosk";
 import Kitchen from "./pages/Kitchen/Kitchen";
 import Restaurant from "./pages/Restaurant/Restaurant";
+import { generateOrderNumber } from './api/fake-server';
 
 const restaurantID = process.env.REACT_APP_RESTAURANT || "";
 
@@ -41,7 +42,13 @@ const App = (): ReactElement => {
 
   const sendPayment = async (orderItems: MenuItemsType[]): Promise<string> => {
     const orderValue = orderItems.reduce((p, c) => p + c.value, 0);
-    return await FakeServer.SendPayment(restaurantID, +orderValue.toFixed(2));
+    let orderNumber = await FakeServer.SendPayment(restaurantID, +orderValue.toFixed(2));
+    // workarround for mock server do not repeat the order number
+    do {
+      orderNumber = generateOrderNumber();
+    // eslint-disable-next-line no-loop-func
+    } while(kitchenOrders.find(o => o.order === orderNumber))
+    return orderNumber;
   };
 
   const getRestaurantMenu = useCallback(
