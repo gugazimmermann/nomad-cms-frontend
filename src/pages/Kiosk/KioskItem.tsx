@@ -27,7 +27,7 @@ const KioskItem = ({
       <div className="w-6/12 p-2 flex flex-col justify-between">
         <h1 className="text-center font-bold text-2xl">{item.name}</h1>
         <h2 className="text-center font-bold text-2xl">
-          {`$ ${item.value.toFixed(2)}`}
+          {`$ ${(+item.value).toFixed(2)}`}
         </h2>
         <button
           type="button"

@@ -6,6 +6,7 @@ import Kiosk from "./pages/Kiosk/Kiosk";
 import Kitchen from "./pages/Kitchen/Kitchen";
 import Restaurant from "./pages/Restaurant/Restaurant";
 import { generateOrderNumber } from './api/fake-server';
+import API from "./api";
 
 const restaurantID = process.env.REACT_APP_RESTAURANT || "";
 
@@ -41,7 +42,7 @@ const App = (): ReactElement => {
   };
 
   const sendPayment = async (orderItems: MenuItemsType[]): Promise<string> => {
-    const orderValue = orderItems.reduce((p, c) => p + c.value, 0);
+    const orderValue = orderItems.reduce((p, c) => p + +c.value, 0);
     let orderNumber = await FakeServer.SendPayment(restaurantID, +orderValue.toFixed(2));
     // workarround for mock server do not repeat the order number
     do {
@@ -53,7 +54,7 @@ const App = (): ReactElement => {
 
   const getRestaurantMenu = useCallback(
     async (restaurantID: string): Promise<void> => {
-      const menuItems = await FakeServer.GetRestaurantMenu(restaurantID);
+      const menuItems = await API.GetRestaurantMenu(restaurantID);
       setMenu(menuItems);
     },
     []

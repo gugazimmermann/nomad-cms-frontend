@@ -7,7 +7,7 @@ export type MenuItemsType = {
   id: string;
   name: string;
   image: string;
-  value: number;
+  value: string;
 }
 
 export type ModalContentType = {

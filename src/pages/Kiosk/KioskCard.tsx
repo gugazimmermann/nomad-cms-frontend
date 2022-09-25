@@ -14,7 +14,7 @@ const KioskCard = ({ item, setShowItem }: KioskCardProps): ReactElement => (
   >
     <img src={item.image} alt={item.name} width={200} className="rounded-md" />
     <span className="font-bold">{item.name}</span>
-    <span>{`$ ${item.value.toFixed(2)}`}</span>
+    <span>{`$ ${(+item.value).toFixed(2)}`}</span>
   </button>
 );
 
