@@ -9,6 +9,7 @@ import { generateOrderNumber } from './api/fake-server';
 import API from "./api";
 
 const restaurantID = process.env.REACT_APP_RESTAURANT || "";
+const menuID = process.env.REACT_APP_MENU || "";
 
 const App = (): ReactElement => {
   const [menu, setMenu] = useState<MenuItemsType[]>([]);
@@ -53,15 +54,21 @@ const App = (): ReactElement => {
   };
 
   const getRestaurantMenu = useCallback(
-    async (restaurantID: string): Promise<void> => {
-      const menuItems = await API.GetRestaurantMenu(restaurantID);
-      setMenu(menuItems);
+    async (restaurantID: string, menuID: string): Promise<void> => {
+      try {
+        const menuItems = await API.GetRestaurantMenu(restaurantID, menuID);
+        setMenu(menuItems);
+      } catch (error: any) {
+        alert(error.message)
+        setMenu([]);
+      }
     },
     []
   );
 
   useEffect(() => {
-    getRestaurantMenu(restaurantID);
+    if (restaurantID && menuID) getRestaurantMenu(restaurantID, menuID);
+    else alert('Missing restaurantID OR menuID')
   }, [getRestaurantMenu]);
 
   return (
