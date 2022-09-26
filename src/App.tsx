@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, ReactElement } from "react";
 import FakeServer from "./api/fake-server";
 import { ORDER_STATUS } from "./interfaces/enums";
-import { MenuItemsType, OrderType, GenericObject } from "./interfaces/types";
+import { OrderType, GenericObject, MenuResponse, OrderItem } from './interfaces/types';
 import Kiosk from "./pages/Kiosk/Kiosk";
 import Kitchen from "./pages/Kitchen/Kitchen";
 import Restaurant from "./pages/Restaurant/Restaurant";
@@ -12,7 +12,7 @@ const restaurantID = process.env.REACT_APP_RESTAURANT || "";
 const menuID = process.env.REACT_APP_MENU || "";
 
 const App = (): ReactElement => {
-  const [menu, setMenu] = useState<MenuItemsType[]>([]);
+  const [menu, setMenu] = useState<MenuResponse[]>([]);
   const [kitchenOrders, setKitchenOrders] = useState<OrderType[]>([]);
   const [restaurantOrders, setRestaurantOrders] = useState<OrderType[]>([]);
 
@@ -22,11 +22,11 @@ const App = (): ReactElement => {
     setRestaurantOrders(orders);
   };
 
-  const organizeKitchenOrders = (orderItems: MenuItemsType[]): MenuItemsType[] => {
+  const organizeKitchenOrders = (orderItems: MenuResponse[]): OrderItem[] => {
     const organizeItens: GenericObject = {};
     orderItems.forEach((item) => {
-      if (!organizeItens[item.id]) organizeItens[item.id] = { ...item, qty: 0 };
-      organizeItens[item.id].qty += 1;
+      if (!organizeItens[item.productID]) organizeItens[item.productID] = { ...item, qty: 0 };
+      organizeItens[item.productID].qty += 1;
     });
     return Object.values(organizeItens);
   };
@@ -42,7 +42,7 @@ const App = (): ReactElement => {
     setKitchenOrders(orders);
   };
 
-  const sendPayment = async (orderItems: MenuItemsType[]): Promise<string> => {
+  const sendPayment = async (orderItems: MenuResponse[]): Promise<string> => {
     const orderValue = orderItems.reduce((p, c) => p + +c.value, 0);
     let orderNumber = await FakeServer.SendPayment(restaurantID, +orderValue.toFixed(2));
     // workarround for mock server do not repeat the order number

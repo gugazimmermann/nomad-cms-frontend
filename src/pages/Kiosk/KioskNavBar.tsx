@@ -1,8 +1,8 @@
 import { ReactElement } from "react";
-import { MenuItemsType } from "../../interfaces/types";
+import { MenuResponse } from "../../interfaces/types";
 
 type KioskNavBarProps = {
-  cartItems: MenuItemsType[];
+  cartItems: MenuResponse[];
   sendOrder: () => void;
 };
 

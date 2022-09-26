@@ -1,10 +1,10 @@
 import { ReactElement } from "react";
-import { MenuItemsType } from "../../interfaces/types";
+import { MenuResponse } from "../../interfaces/types";
 
 type KioskItemProps = {
-  item: MenuItemsType;
+  item: MenuResponse;
   disabled: boolean;
-  handler: (item: MenuItemsType) => void;
+  handler: (item: MenuResponse) => void;
   back: (item: null) => void;
 };
 

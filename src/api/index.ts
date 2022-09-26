@@ -1,12 +1,10 @@
 import axios from "axios";
-import { MenuItemsType } from "../interfaces/types";
+import { MenuResponse } from "../interfaces/types";
 
-const ENDPOINT = process.env.REACT_APP_API_ENDPOINT || "";
+const RESTAURANT_MENU = process.env.REACT_APP_RESTAURANT_MENU_API_ENDPOINT || "";
 
-const api = axios.create({ baseURL: ENDPOINT });
-
-const GetRestaurantMenu = async (restaurantID: string, menuID: string): Promise<MenuItemsType[]> => {
-  const { data } = await api.get(`${restaurantID}/${menuID}`);
+const GetRestaurantMenu = async (restaurantID: string, menuID: string): Promise<MenuResponse[]> => {
+  const { data } = await axios.get(`${RESTAURANT_MENU}${restaurantID}/${menuID}`);
   return data;
 };
 

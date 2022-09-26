@@ -1,16 +1,16 @@
 import { ReactElement, useEffect, useRef, useState } from "react";
-import { MenuItemsType, ModalContentType, OrderType } from "../../interfaces/types";
+import { MenuResponse, ModalContentType, OrderItem, OrderType } from "../../interfaces/types";
 import { KioskCard, KioskItem, KioskModal, KioskNavBar } from ".";
 
 type KioskProps = {
-  menu: MenuItemsType[];
-  handlePayment: (cartItems: MenuItemsType[]) => Promise<string>;
+  menu: MenuResponse[];
+  handlePayment: (cartItems: MenuResponse[]) => Promise<string>;
   handeOrders: (order: OrderType) => void;
 };
 
 const Kiosk = ({ menu, handlePayment, handeOrders }: KioskProps): ReactElement => {
-  const [showItem, setShowItem] = useState<MenuItemsType | null>(null);
-  const [cartItems, setCartItems] = useState<MenuItemsType[]>([]);
+  const [showItem, setShowItem] = useState<MenuResponse | null>(null);
+  const [cartItems, setCartItems] = useState<MenuResponse[]>([]);
   const [modalContent, setModalContent] = useState<ModalContentType>();
   const refModalTimer = useRef<number | null>(null);
 
@@ -22,7 +22,7 @@ const Kiosk = ({ menu, handlePayment, handeOrders }: KioskProps): ReactElement =
         text: `Thanks for Ordering, your order number is: ${order}`,
       });
       handeOrders({ order, items: cartItems });
-      setCartItems([] as MenuItemsType[]);
+      setCartItems([] as OrderItem[]);
     } catch (error: any) {
       setModalContent({
         color: "bg-danger text-white",
@@ -31,7 +31,7 @@ const Kiosk = ({ menu, handlePayment, handeOrders }: KioskProps): ReactElement =
     }
   };
 
-  const handleSendToCart = (item: MenuItemsType) => {
+  const handleSendToCart = (item: MenuResponse) => {
     setModalContent({
       color: "bg-primary text-white",
       text: `${showItem?.name} Added to the Cart`,
@@ -60,7 +60,7 @@ const Kiosk = ({ menu, handlePayment, handeOrders }: KioskProps): ReactElement =
       {!showItem ? (
         <div className="grid grid-cols-2">
           {menu.map((item) => (
-            <KioskCard key={item.id} item={item} setShowItem={setShowItem} />
+            <KioskCard key={item.productID} item={item} setShowItem={setShowItem} />
           ))}
         </div>
       ) : (
