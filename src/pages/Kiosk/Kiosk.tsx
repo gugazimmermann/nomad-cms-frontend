@@ -1,14 +1,25 @@
 import { ReactElement, useEffect, useRef, useState } from "react";
-import { MenuResponse, ModalContentType, OrderItem, OrderType } from "../../interfaces/types";
-import { KioskCard, KioskItem, KioskModal, KioskNavBar } from ".";
+import {
+  MenuResponse,
+  ModalContentType,
+  OrderItem,
+  OrderType,
+} from "../../interfaces/types";
+import { KioskCard, KioskItem, KioskLoading, KioskModal, KioskNavBar } from ".";
 
 type KioskProps = {
+  loading: boolean;
   menu: MenuResponse[];
   handlePayment: (cartItems: MenuResponse[]) => Promise<string>;
   handeOrders: (order: OrderType) => void;
 };
 
-const Kiosk = ({ menu, handlePayment, handeOrders }: KioskProps): ReactElement => {
+const Kiosk = ({
+  loading,
+  menu,
+  handlePayment,
+  handeOrders,
+}: KioskProps): ReactElement => {
   const [showItem, setShowItem] = useState<MenuResponse | null>(null);
   const [cartItems, setCartItems] = useState<MenuResponse[]>([]);
   const [modalContent, setModalContent] = useState<ModalContentType>();
@@ -56,20 +67,32 @@ const Kiosk = ({ menu, handlePayment, handeOrders }: KioskProps): ReactElement =
     <div className="relative">
       <KioskModal content={modalContent} />
       <h1 className="text-center bg-warning text-white p-2">Kiosk Screen</h1>
-      <KioskNavBar cartItems={cartItems} sendOrder={handleSendOrder} />
-      {!showItem ? (
-        <div className="grid grid-cols-2">
-          {menu.map((item) => (
-            <KioskCard key={item.productID} item={item} setShowItem={setShowItem} />
-          ))}
+      {loading ? (
+        <div className="flex flex-row justify-center items-center w-full h-screen">
+          <KioskLoading />
         </div>
       ) : (
-        <KioskItem
-          item={showItem}
-          disabled={!!modalContent}
-          handler={handleSendToCart}
-          back={setShowItem}
-        />
+        <>
+          <KioskNavBar cartItems={cartItems} sendOrder={handleSendOrder} />
+          {!showItem ? (
+            <div className="grid grid-cols-2">
+              {menu.map((item) => (
+                <KioskCard
+                  key={item.productID}
+                  item={item}
+                  setShowItem={setShowItem}
+                />
+              ))}
+            </div>
+          ) : (
+            <KioskItem
+              item={showItem}
+              disabled={!!modalContent}
+              handler={handleSendToCart}
+              back={setShowItem}
+            />
+          )}
+        </>
       )}
     </div>
   );

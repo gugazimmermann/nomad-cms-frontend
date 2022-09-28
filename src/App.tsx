@@ -12,6 +12,7 @@ const restaurantID = process.env.REACT_APP_RESTAURANT || "";
 const menuID = process.env.REACT_APP_MENU || "";
 
 const App = (): ReactElement => {
+  const [loading, setLoading] = useState<boolean>(false)
   const [menu, setMenu] = useState<MenuResponse[]>([]);
   const [kitchenOrders, setKitchenOrders] = useState<OrderType[]>([]);
   const [restaurantOrders, setRestaurantOrders] = useState<OrderType[]>([]);
@@ -55,6 +56,7 @@ const App = (): ReactElement => {
 
   const getRestaurantMenu = useCallback(
     async (restaurantID: string, menuID: string): Promise<void> => {
+      setLoading(true);
       try {
         const menuItems = await API.GetRestaurantMenu(restaurantID, menuID);
         setMenu(menuItems);
@@ -62,6 +64,7 @@ const App = (): ReactElement => {
         alert(error.message)
         setMenu([]);
       }
+      setLoading(false);
     },
     []
   );
@@ -78,6 +81,7 @@ const App = (): ReactElement => {
           menu={menu}
           handlePayment={sendPayment}
           handeOrders={handleKitchenOrders}
+          loading={loading}
         />
       </div>
       <div className="w-6/12">
