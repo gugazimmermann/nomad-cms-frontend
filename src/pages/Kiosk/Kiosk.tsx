@@ -15,6 +15,7 @@ import {
 } from ".";
 import KioskOrderModal from "./KioskOrderModal";
 import { OrderResponseType } from "../../interfaces/types";
+import { ORDER_STATUS } from "../../interfaces/enums";
 
 const restaurantID = process.env.REACT_APP_RESTAURANT || "";
 const menuID = process.env.REACT_APP_MENU || "";
@@ -108,18 +109,28 @@ const Kiosk = ({ payload }: KioskProps): ReactElement => {
   }, [getRestaurantMenu]);
 
   useEffect(() => {
-    if (payload) {
+    if (
+      payload &&
+      payload.status !== ORDER_STATUS.WAITING &&
+      payload.status !== ORDER_STATUS.PREPARING &&
+      payload.status !== ORDER_STATUS.READY &&
+      payload.status !== ORDER_STATUS.DELIVERED &&
+      payload.status !== ORDER_STATUS.DONE
+    ) {
       setOrderModalContent({
         color: "bg-warning text-white",
         text: `Order ${payload.orderNumber}, ${payload.status}. `,
       });
     }
-  }, [payload])
+  }, [payload]);
 
   return (
     <div className="relative">
       <KioskCartModal content={cartModalContent} />
-      <KioskOrderModal content={orderModalContent} setOrderModalContent={setOrderModalContent} />
+      <KioskOrderModal
+        content={orderModalContent}
+        setOrderModalContent={setOrderModalContent}
+      />
       <h1 className="text-center bg-warning text-white p-2">Kiosk Screen</h1>
       {loadingMenu ? (
         <div className="flex flex-row justify-center items-center w-full h-screen z-50">
