@@ -38,6 +38,7 @@ const Kitchen = ({ payload }: KitchenProps): ReactElement => {
       cloneKitchenOrders.push(payload)
       setKitchenOrders(cloneKitchenOrders)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [payload]);
 
   return (
