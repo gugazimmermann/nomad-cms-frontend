@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, ReactElement } from "react";
+import useWebSocket from "react-use-websocket";
 import FakeServer from "./api/fake-server";
 import { ORDER_STATUS } from "./interfaces/enums";
 import {
@@ -23,6 +24,16 @@ const App = (): ReactElement => {
   const [menu, setMenu] = useState<MenuItemType[]>([]);
   const [kitchenOrders, setKitchenOrders] = useState<OrderType[]>([]);
   const [restaurantOrders, setRestaurantOrders] = useState<OrderType[]>([]);
+
+  // const { lastJsonMessage } = useWebSocket(WEBSOCKET_ENDPOINT, {
+  //   onOpen: () => console.log(`Connected to Restaurant Orders`),
+  //   onMessage: () => {
+  //     if (lastJsonMessage) console.log(lastJsonMessage);
+  //   },
+  //   onError: (event) => console.error(event),
+  //   shouldReconnect: () => true,
+  //   reconnectInterval: 3000,
+  // });
 
   const handleRestaurantOrders = (order: OrderType): void => {
     const orders = restaurantOrders.map((x) => x);
