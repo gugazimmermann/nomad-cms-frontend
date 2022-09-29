@@ -14,31 +14,28 @@ const Kitchen = ({ payload }: KitchenProps): ReactElement => {
   const changeStatus = async (order: OrderResponseType) => {
     const cloneOrder: OrderResponseType = JSON.parse(JSON.stringify(order));
     if (cloneOrder.status === ORDER_STATUS.READY) {
-      const res = await API.ChangeOrderStatus(
+      await API.ChangeOrderStatus(
         order.restaurantID,
         order.menuID,
         order.orderID,
         ORDER_STATUS.DELIVERED
       );
-      console.log(res);
     }
     if (cloneOrder.status === ORDER_STATUS.PREPARING) {
-      const res = await API.ChangeOrderStatus(
+      await API.ChangeOrderStatus(
         order.restaurantID,
         order.menuID,
         order.orderID,
         ORDER_STATUS.READY
       );
-      console.log(res);
     }
     if (cloneOrder.status === ORDER_STATUS.WAITING) {
-      const res = await API.ChangeOrderStatus(
+      await API.ChangeOrderStatus(
         order.restaurantID,
         order.menuID,
         order.orderID,
         ORDER_STATUS.PREPARING
       );
-      console.log(res);
     }
     const newOrdersList = kitchenOrders.map((o) => {
       if (o.updatedAt === cloneOrder.updatedAt) return cloneOrder;

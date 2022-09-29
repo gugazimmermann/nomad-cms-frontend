@@ -27,7 +27,6 @@ const App = (): ReactElement => {
       const p =
         payload.length > 1 ? payload.length[payload.length + 1] : payload[0];
       setPayload(p)
-      console.log("payload", p);
     };
   }, [ws]);
 
