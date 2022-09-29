@@ -1,9 +1,9 @@
 import { ReactElement } from "react";
-import { MenuResponse } from '../../interfaces/types';
+import { MenuItemType } from '../../interfaces/types';
 
 type KioskCardProps = {
-  item: MenuResponse;
-  setShowItem: (item: MenuResponse) => void;
+  item: MenuItemType;
+  setShowItem: (item: MenuItemType) => void;
 };
 
 const KioskCard = ({ item, setShowItem }: KioskCardProps): ReactElement => (

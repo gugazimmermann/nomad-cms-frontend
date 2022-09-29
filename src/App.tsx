@@ -1,19 +1,26 @@
 import { useState, useCallback, useEffect, ReactElement } from "react";
 import FakeServer from "./api/fake-server";
 import { ORDER_STATUS } from "./interfaces/enums";
-import { OrderType, GenericObject, MenuResponse, OrderItem } from './interfaces/types';
+import {
+  OrderType,
+  GenericObject,
+  MenuItemType,
+  OrderItemType,
+} from "./interfaces/types";
 import Kiosk from "./pages/Kiosk/Kiosk";
 import Kitchen from "./pages/Kitchen/Kitchen";
 import Restaurant from "./pages/Restaurant/Restaurant";
-import { generateOrderNumber } from './api/fake-server';
+import { generateOrderNumber } from "./api/fake-server";
 import API from "./api";
 
 const restaurantID = process.env.REACT_APP_RESTAURANT || "";
 const menuID = process.env.REACT_APP_MENU || "";
+const WEBSOCKET_ENDPOINT =
+  process.env.REACT_APP_ORDERS_WEBSOCKET_ENDPOINT || "";
 
 const App = (): ReactElement => {
-  const [loading, setLoading] = useState<boolean>(false)
-  const [menu, setMenu] = useState<MenuResponse[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [menu, setMenu] = useState<MenuItemType[]>([]);
   const [kitchenOrders, setKitchenOrders] = useState<OrderType[]>([]);
   const [restaurantOrders, setRestaurantOrders] = useState<OrderType[]>([]);
 
@@ -23,10 +30,11 @@ const App = (): ReactElement => {
     setRestaurantOrders(orders);
   };
 
-  const organizeKitchenOrders = (orderItems: MenuResponse[]): OrderItem[] => {
+  const organizeKitchenOrders = (orderItems: MenuItemType[]): OrderItemType[] => {
     const organizeItens: GenericObject = {};
     orderItems.forEach((item) => {
-      if (!organizeItens[item.productID]) organizeItens[item.productID] = { ...item, qty: 0 };
+      if (!organizeItens[item.productID])
+        organizeItens[item.productID] = { ...item, qty: 0 };
       organizeItens[item.productID].qty += 1;
     });
     return Object.values(organizeItens);
@@ -43,14 +51,17 @@ const App = (): ReactElement => {
     setKitchenOrders(orders);
   };
 
-  const sendPayment = async (orderItems: MenuResponse[]): Promise<string> => {
+  const sendPayment = async (orderItems: MenuItemType[]): Promise<string> => {
     const orderValue = orderItems.reduce((p, c) => p + +c.value, 0);
-    let orderNumber = await FakeServer.SendPayment(restaurantID, +orderValue.toFixed(2));
+    let orderNumber = await FakeServer.SendPayment(
+      restaurantID,
+      +orderValue.toFixed(2)
+    );
     // workarround for mock server do not repeat the order number
     do {
       orderNumber = generateOrderNumber();
-    // eslint-disable-next-line no-loop-func
-    } while(kitchenOrders.find(o => o.order === orderNumber))
+      // eslint-disable-next-line no-loop-func
+    } while (kitchenOrders.find((o) => o.order === orderNumber));
     return orderNumber;
   };
 
@@ -61,7 +72,7 @@ const App = (): ReactElement => {
         const menuItems = await API.GetRestaurantMenu(restaurantID, menuID);
         setMenu(menuItems);
       } catch (error: any) {
-        alert(error.message)
+        alert(error.message);
         setMenu([]);
       }
       setLoading(false);
@@ -71,7 +82,7 @@ const App = (): ReactElement => {
 
   useEffect(() => {
     if (restaurantID && menuID) getRestaurantMenu(restaurantID, menuID);
-    else alert('Missing restaurantID OR menuID')
+    else alert("Missing restaurantID OR menuID");
   }, [getRestaurantMenu]);
 
   return (
@@ -86,7 +97,10 @@ const App = (): ReactElement => {
       </div>
       <div className="w-6/12">
         <div className="h-2/4 bg-secondary/10">
-          <Kitchen orders={kitchenOrders} handeOrders={handleRestaurantOrders} />
+          <Kitchen
+            orders={kitchenOrders}
+            handeOrders={handleRestaurantOrders}
+          />
         </div>
         <div className="h-2/4 bg-primary/10">
           <Restaurant orders={restaurantOrders} />

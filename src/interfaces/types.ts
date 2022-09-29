@@ -2,14 +2,14 @@ import { ORDER_STATUS } from "./enums";
 
 export type GenericObject = { [key: string]: any };
 
-export interface MenuResponse {
+export interface MenuItemType {
   productID: string;
   name: string;
   image: string;
   value: string;
 }
 
-export interface OrderItem extends MenuResponse {
+export interface OrderItemType extends MenuItemType {
   qty?: number;
 }
 
@@ -20,7 +20,7 @@ export type ModalContentType = {
 
 export type OrderType = {
   order: string;
-  items: OrderItem[];
+  items: OrderItemType[];
   datetime?: number;
   status?: ORDER_STATUS;
 }

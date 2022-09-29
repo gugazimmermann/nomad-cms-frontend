@@ -1,16 +1,16 @@
 import { ReactElement, useEffect, useRef, useState } from "react";
 import {
-  MenuResponse,
+  MenuItemType,
   ModalContentType,
-  OrderItem,
+  OrderItemType,
   OrderType,
 } from "../../interfaces/types";
 import { KioskCard, KioskItem, KioskLoading, KioskModal, KioskNavBar } from ".";
 
 type KioskProps = {
   loading: boolean;
-  menu: MenuResponse[];
-  handlePayment: (cartItems: MenuResponse[]) => Promise<string>;
+  menu: MenuItemType[];
+  handlePayment: (cartItems: OrderItemType[]) => Promise<string>;
   handeOrders: (order: OrderType) => void;
 };
 
@@ -20,8 +20,8 @@ const Kiosk = ({
   handlePayment,
   handeOrders,
 }: KioskProps): ReactElement => {
-  const [showItem, setShowItem] = useState<MenuResponse | null>(null);
-  const [cartItems, setCartItems] = useState<MenuResponse[]>([]);
+  const [showItem, setShowItem] = useState<MenuItemType | null>(null);
+  const [cartItems, setCartItems] = useState<OrderItemType[]>([]);
   const [modalContent, setModalContent] = useState<ModalContentType>();
   const refModalTimer = useRef<number | null>(null);
 
@@ -33,7 +33,7 @@ const Kiosk = ({
         text: `Thanks for Ordering, your order number is: ${order}`,
       });
       handeOrders({ order, items: cartItems });
-      setCartItems([] as OrderItem[]);
+      setCartItems([] as OrderItemType[]);
     } catch (error: any) {
       setModalContent({
         color: "bg-danger text-white",
@@ -42,7 +42,7 @@ const Kiosk = ({
     }
   };
 
-  const handleSendToCart = (item: MenuResponse) => {
+  const handleSendToCart = (item: MenuItemType) => {
     setModalContent({
       color: "bg-primary text-white",
       text: `${showItem?.name} Added to the Cart`,
