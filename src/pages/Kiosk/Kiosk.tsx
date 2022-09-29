@@ -114,8 +114,7 @@ const Kiosk = ({ payload }: KioskProps): ReactElement => {
       payload.status !== ORDER_STATUS.WAITING &&
       payload.status !== ORDER_STATUS.PREPARING &&
       payload.status !== ORDER_STATUS.READY &&
-      payload.status !== ORDER_STATUS.DELIVERED &&
-      payload.status !== ORDER_STATUS.DONE
+      payload.status !== ORDER_STATUS.DELIVERED
     ) {
       setOrderModalContent({
         color: "bg-warning text-white",

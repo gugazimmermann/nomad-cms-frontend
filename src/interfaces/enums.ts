@@ -13,5 +13,4 @@ export enum ORDER_STATUS {
   PREPARING = 'preparing',
   READY = 'ready',
   DELIVERED = 'delivered',
-  DONE = 'done'
 }

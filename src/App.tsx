@@ -2,6 +2,7 @@ import { ReactElement, useEffect, useState } from "react";
 import { OrderResponseType } from "./interfaces/types";
 import Kiosk from "./pages/Kiosk/Kiosk";
 import Kitchen from "./pages/Kitchen/Kitchen";
+import Restaurant from "./pages/Restaurant/Restaurant";
 
 const WSEndpoint = process.env.REACT_APP_ORDERS_WEBSOCKET_ENDPOINT || "";
 
@@ -40,7 +41,7 @@ const App = (): ReactElement => {
           <Kitchen payload={payload} />
         </div>
         <div className="h-2/4 bg-primary/10">
-          {/* <Restaurant orders={restaurantOrders} /> */}
+          <Restaurant payload={payload} />
         </div>
       </div>
     </div>
