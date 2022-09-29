@@ -1,33 +1,44 @@
 import { ReactElement, useEffect, useState } from "react";
 import { ORDER_STATUS } from "../../interfaces/enums";
-import { OrderType } from "../../interfaces/types";
+import { OrderResponseType } from "../../interfaces/types";
 import { KitchenRow } from ".";
 
 type KitchenProps = {
-  orders: OrderType[];
-  handeOrders: (order: OrderType) => void;
+  payload: OrderResponseType | undefined;
 };
 
-const Kitchen = ({ orders, handeOrders }: KitchenProps): ReactElement => {
-  const [kitchenOrders, setKitchenOrders] = useState<OrderType[]>([]);
+const Kitchen = ({ payload }: KitchenProps): ReactElement => {
+  const [kitchenOrders, setKitchenOrders] = useState<OrderResponseType[]>([]);
 
-  const changeStatus = (order: OrderType) => {
-    const cloneOrder: OrderType = JSON.parse(JSON.stringify(order));
-    if (cloneOrder.status === ORDER_STATUS.READY) cloneOrder.status = ORDER_STATUS.DELIVERED;
-    if (cloneOrder.status === ORDER_STATUS.PREPARING) cloneOrder.status = ORDER_STATUS.READY;
-    if (cloneOrder.status === ORDER_STATUS.WAITING) cloneOrder.status = ORDER_STATUS.PREPARING;
-    const newOrdersList = kitchenOrders.map(o => {
-      if (o.datetime === cloneOrder.datetime) return cloneOrder
-      return o
+  const changeStatus = (order: OrderResponseType) => {
+    const cloneOrder: OrderResponseType = JSON.parse(JSON.stringify(order));
+    if (cloneOrder.status === ORDER_STATUS.READY)
+      cloneOrder.status = ORDER_STATUS.DELIVERED;
+    if (cloneOrder.status === ORDER_STATUS.PREPARING)
+      cloneOrder.status = ORDER_STATUS.READY;
+    if (cloneOrder.status === ORDER_STATUS.WAITING)
+      cloneOrder.status = ORDER_STATUS.PREPARING;
+    const newOrdersList = kitchenOrders.map((o) => {
+      if (o.updatedAt === cloneOrder.updatedAt) return cloneOrder;
+      return o;
     });
-    setKitchenOrders(newOrdersList.filter(o => o.status !== ORDER_STATUS.DELIVERED));
-    const readyForDelivery = newOrdersList.find(o => o.status === ORDER_STATUS.DELIVERED);
-    if (readyForDelivery) handeOrders(readyForDelivery);
-  }
+    setKitchenOrders(
+      newOrdersList.filter((o) => o.status !== ORDER_STATUS.DELIVERED)
+    );
+  };
 
   useEffect(() => {
-    setKitchenOrders(orders);
-  }, [orders]);
+    if (
+      payload &&
+      (payload.status === ORDER_STATUS.WAITING ||
+        payload.status === ORDER_STATUS.PREPARING ||
+        payload.status === ORDER_STATUS.READY)
+    ) {
+      const cloneKitchenOrders = kitchenOrders.map(x => x);
+      cloneKitchenOrders.push(payload)
+      setKitchenOrders(cloneKitchenOrders)
+    }
+  }, [payload]);
 
   return (
     <div>
@@ -35,7 +46,9 @@ const Kitchen = ({ orders, handeOrders }: KitchenProps): ReactElement => {
         Kitchen Screen
       </h1>
       <div className="p-2">
-        {kitchenOrders.map((o) => <KitchenRow key={o.datetime} order={o} handleStatus={changeStatus} />)}
+        {kitchenOrders.map((o) => (
+          <KitchenRow key={o.updatedAt} order={o} handleStatus={changeStatus} />
+        ))}
       </div>
     </div>
   );

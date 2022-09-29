@@ -5,7 +5,7 @@ type ModalProps = {
   content: ModalContentType | undefined;
 };
 
-const KioskModal = ({ content }: ModalProps): ReactElement => (
+const KioskCartModal = ({ content }: ModalProps): ReactElement => (
   <div
     className={`${
       !content ? "hidden" : "flex"
@@ -17,4 +17,4 @@ const KioskModal = ({ content }: ModalProps): ReactElement => (
   </div>
 );
 
-export default KioskModal;
+export default KioskCartModal;

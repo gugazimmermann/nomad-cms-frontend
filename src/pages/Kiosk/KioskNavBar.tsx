@@ -3,18 +3,18 @@ import { MenuItemType } from "../../interfaces/types";
 
 type KioskNavBarProps = {
   cartItems: MenuItemType[];
-  sendOrder: () => void;
+  handleOrder: () => void;
 };
 
 const KioskNavBar = ({
   cartItems,
-  sendOrder,
+  handleOrder,
 }: KioskNavBarProps): ReactElement => (
   <div className="flex flex-row justify-between items-center p-2">
     <button
       type="button"
       disabled={!cartItems.length}
-      onClick={() => sendOrder()}
+      onClick={() => handleOrder()}
       className={`px-2 py-1.5 rounded-md shadow-md text-white ${
         !cartItems.length ? "bg-gray-500" : "bg-primary "
       }`}

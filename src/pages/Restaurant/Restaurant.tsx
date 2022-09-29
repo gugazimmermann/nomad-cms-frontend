@@ -1,8 +1,8 @@
 import { ReactElement } from 'react';
-import { OrderType } from "../../interfaces/types";
+import { OrderResponseType } from "../../interfaces/types";
 
 type RestaurantProps = {
-  orders: OrderType[];
+  orders: OrderResponseType[];
 };
 
 const Restaurant = ({ orders }: RestaurantProps): ReactElement => {
@@ -13,8 +13,8 @@ const Restaurant = ({ orders }: RestaurantProps): ReactElement => {
       </h1>
       <div className="py-2">
         {orders.map((o) => (
-          <div key={o.datetime} className="w-full bg-primary/50 text-white px-4 py-2 border-b-2 border-b-primary uppercase">
-            <span className="font-bold">{o.order}</span> - order ready
+          <div key={o.updatedAt} className="w-full bg-primary/50 text-white px-4 py-2 border-b-2 border-b-primary uppercase">
+            <span className="font-bold">{o.orderNumber}</span> - order ready
           </div>
         ))}
       </div>

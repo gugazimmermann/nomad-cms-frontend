@@ -2,25 +2,41 @@ import { ORDER_STATUS } from "./enums";
 
 export type GenericObject = { [key: string]: any };
 
-export interface MenuItemType {
+export type MenuItemType = {
   productID: string;
   name: string;
   image: string;
   value: string;
-}
+};
 
-export interface OrderItemType extends MenuItemType {
-  qty?: number;
-}
+export type OrderItemType = {
+  quantity: number;
+  productID: string;
+  name: string;
+  value: string;
+};
+
+export type OrderType = {
+  orderNumber?: number;
+  restaurantID: string;
+  menuID: string;
+  orderItems: OrderItemType[];
+  total: string;
+};
 
 export type ModalContentType = {
   color: string;
   text: string;
-}
+};
 
-export type OrderType = {
-  order: string;
-  items: OrderItemType[];
-  datetime?: number;
-  status?: ORDER_STATUS;
-}
+export type OrderResponseType = {
+  restaurantID: string;
+  menuID: string;
+  orderID: string;
+  orderItems: OrderItemType[];
+  orderNumber: number;
+  status: ORDER_STATUS;
+  total: string;
+  createdAt: string;
+  updatedAt: string;
+};

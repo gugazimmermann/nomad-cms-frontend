@@ -1,11 +1,11 @@
 import { ReactElement, useState } from "react";
-import { OrderType } from "../../interfaces/types";
+import { OrderResponseType } from "../../interfaces/types";
 import { ORDER_STATUS } from "../../interfaces/enums";
 import { CaretIcon } from ".";
 
 type KitchenRowProps = {
-  order: OrderType;
-  handleStatus: (order: OrderType) => void;
+  order: OrderResponseType;
+  handleStatus: (order: OrderResponseType) => void;
 };
 
 const KitchenRow = ({ order, handleStatus }: KitchenRowProps): ReactElement => {
@@ -20,7 +20,7 @@ const KitchenRow = ({ order, handleStatus }: KitchenRowProps): ReactElement => {
 
   return (
     <div className="w-full bg-secondary/50 text-white p-2 border-b-2 border-b-secondary">
-      <div key={order.datetime} className="flex flex-row">
+      <div key={order.updatedAt} className="flex flex-row">
         <div className="w-4/12">
           <button
             className="flex flex-row"
@@ -28,7 +28,7 @@ const KitchenRow = ({ order, handleStatus }: KitchenRowProps): ReactElement => {
             onClick={() => setShow(!show)}
           >
             <CaretIcon rotate={!!show} />
-            {`Order ${order.order}`}
+            {`Order ${order.orderNumber}`}
           </button>
         </div>
         <div className="w-4/12 uppercase">{order.status}</div>
@@ -40,12 +40,12 @@ const KitchenRow = ({ order, handleStatus }: KitchenRowProps): ReactElement => {
         </div>
       </div>
       {show &&
-        order.items.map((item) => (
+        order.orderItems.map((item) => (
           <div
-            key={`${order.datetime}${item.qty}${item.name}`}
+            key={`${order.updatedAt}${item.quantity}${item.name}`}
             className="bg-secondary/50 text-white p-2"
           >
-            {`${item.qty}x ${item.name}`}
+            {`${item.quantity}x ${item.name}`}
           </div>
         ))}
     </div>
